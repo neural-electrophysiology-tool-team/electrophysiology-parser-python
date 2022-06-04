@@ -1,29 +1,48 @@
-
 import pyopenephys
 import numpy as np
-import CommonFunctions as CF
+import FormatInterface
 
-def HandelOEFile(inputFile):
-    extractedFile = pyopenephys.File(inputFile)
-    experiments=extractedFile.experiments
-    for experiment in experiments:
-        recordings =experiment.recordings
-        for recording in recordings:
-            #metaData = np.array((recording.analog_signals[0]).signal)
-            #timestamps = np.array((recording.analog_signals[0]).times)
-           # userPreferences = CF.GetUserPreferences(timestamps, len(metaData))
-            userPreferences = {}
-            durationMS = float((recording).duration)*1e3 # Scan all files and gets the total duration, therefore, needs to come first
-            samplingRate=float(recording.sample_rate)
-            timeStepMS = float(1/samplingRate)*1e3
-            userPreferences = CF.GetRelevantTimestamps(durationMS, timeStepMS, userPreferences)
-            nChannels =int (recording.nchan)
-            userPreferences = CF.GetRelevantChannels(nChannels, userPreferences)
-            if ((userPreferences['startTimeIndex'] != None) and (userPreferences['endTimeIndex'] != None) and (userPreferences['startChannel'] != None) and (userPreferences['endChannel'] != None) and (userPreferences['timestamps'][0] != None)):
-                metaData = np.array(((recording.analog_signals[0]).signal)[userPreferences['startChannel'] - 1:userPreferences['endChannel'], userPreferences['startTimeIndex']:userPreferences['endTimeIndex']])
-                CF.PlotData(metaData.transpose(), userPreferences)
-            else:
-                print("Error Loading Data, Please Try Again")
+#These classes inherit from FormatInterface.
+class HandelOEFile(FormatInterface.FormatInterface):
+    def __init__(self,inputFile,isGui):
+        super().__init__()
+        self.isGui=isGui
+        self.inputFile = inputFile
+        self.experiments = []
+        self.recordings = []
+        self.extractedFile = []
 
+    # GetData- extracts the data (usually done via python packages).
+    # it should extract the data according to the selected channels and time window.
+    # It should also extract the time step (sampling rate), the total time duration and the number of channels for both GUI and Console applications.
+    def GetData(self):
+        try:
+            self.extractedFile = pyopenephys.File(self.inputFile)
+            self.experiments=self.extractedFile.experiments
+            for experiment in  self.experiments:
+                self.recordings =experiment.recordings
+                for recording in  self.recordings:
+                    self.durationMS = float((recording).duration)*1e3 # Scan all files and gets the total duration, therefore, needs to come first
+                    samplingRate=float(recording.sample_rate)
+                    self.timeStepMS = float(1/samplingRate)*1e3
+                    self.nChannels =int (recording.nchan)
+                    if (self.isGui == False):
+                        self.GetRelevantTimestamps()
+                        self.GetRelevantChannels()
+                        if ((self.startTimeIndex != None) and (self.endTimeIndex != None) and ( self.startChannel != None) and (self.endChannel != None) and ( self.timestamps[0] != None)):
+                            self.metaData = np.array(((recording.analog_signals[0]).signal)[ self.startChannel-1: self.endChannel,  self.startTimeIndex: self.endTimeIndex])
+                            self.metaData = self.metaData.transpose()
+                            self.PlotData(self.isGui)
+                        else:
+                            print("Error Loading Data, Please Try Again")
+        except Exception as e:
+            print("An exception occurred. Please Try Again")
+            print(e)
+            return
 
-
+    # GetAndPlotMetaData- Extract the data for GUI application and plots it.
+    def GetAndPlotMetaData(self):
+        self.metaData = np.array(((self.recordings[0].analog_signals[0]).signal)[0: self.nChannels,
+                                 self.startTimeIndex: self.endTimeIndex])
+        self.metaData = self.metaData.transpose()
+        return self.PlotData(self.isGui)

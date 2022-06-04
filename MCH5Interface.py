@@ -1,27 +1,50 @@
 import h5py
 import numpy as np
-import CommonFunctions as CF
+import FormatInterface
 
+#These classes inherit from FormatInterface.
+class HandelMCH5File(FormatInterface.FormatInterface):
+    def __init__(self,inputFile,isGui):
+        super().__init__()
+        self.isGui=isGui
+        self.inputFile = inputFile
+        self.listOfRecordings = []
+        self.listOfStreams = []
+        self.extractedFile = []
 
-def HandelMCH5File(inputFile):
-    tickPosition = 9
-    extractedFile = h5py.File(inputFile,"r")
-    listOfRecordings= CF.ShowFileInnerSection(extractedFile['/Data/'])
-    for recording in listOfRecordings:
-        listOfStreams= CF.ShowFileInnerSection(extractedFile['/Data/'+recording+'/AnalogStream/'])
-        for stream in listOfStreams:
-           #metaData = np.array((extractedFile['/Data/'+recording+'/AnalogStream/'+stream+'/ChannelData'])[0:252,0:100000])
-           # metaData = np.array((extractedFile['/Data/' + recording + '/AnalogStream/' + stream + '/ChannelData']))
-           #timestamps = np.array(np.linspace(0, len(metaData[0]) * timeStep, len(metaData[0])))
-           # timeStep = (extractedFile['/Data/' + recording + '/AnalogStream/' + stream + '/InfoChannel'][0])[  tickPosition] * 1e-6
-            userPreferences={}
-            timeStepMS= (extractedFile['/Data/' + recording + '/AnalogStream/' + stream + '/InfoChannel'][0])[tickPosition]*1e-3
-            durationMS = (extractedFile['/Data/' + recording + '/AnalogStream/' + stream + '/ChannelDataTimeStamps'][0,2])*timeStepMS
-            userPreferences=CF.GetRelevantTimestamps(durationMS,timeStepMS,userPreferences)
-            nChannels = len(np.array((extractedFile['/Data/' + recording + '/AnalogStream/' + stream + '/ChannelData'])[:, 0]))
-            userPreferences=CF.GetRelevantChannels(nChannels,userPreferences)
-            if ((userPreferences['startTimeIndex']!=None) and (userPreferences['endTimeIndex']!=None) and (userPreferences['startChannel']!=None) and (userPreferences['endChannel']!=None) and (userPreferences['timestamps'][0]!=None)):
-                metaData = np.array(
-                    (extractedFile['/Data/' + recording + '/AnalogStream/' + stream + '/ChannelData'])[userPreferences['startChannel']-1:userPreferences['endChannel'], userPreferences['startTimeIndex']:userPreferences['endTimeIndex']])
-                CF.PlotData(metaData.transpose(), userPreferences)
-            else: print("Error Loading Data, Please Try Again")
+    #GetData- extracts the data (usually done via python packages).
+    #it should extract the data according to the selected channels and time window.
+    #It should also extract the time step (sampling rate), the total time duration and the number of channels for both GUI and Console applications.
+    def GetData(self):
+        try:
+            tickPosition = 9
+            self.extractedFile = h5py.File(self.inputFile,"r")
+            self.listOfRecordings= self.ShowFileInnerSection(self.extractedFile['/Data/'])
+            for recording in self.listOfRecordings:
+                self.listOfStreams= self.ShowFileInnerSection(self.extractedFile['/Data/'+recording+'/AnalogStream/'])
+                for stream in self.listOfStreams:
+                    self.timeStepMS= (self.extractedFile['/Data/' + recording + '/AnalogStream/' + stream + '/InfoChannel'][0])[tickPosition]*1e-3
+                    self.durationMS = (self.extractedFile['/Data/' + recording + '/AnalogStream/' + stream + '/ChannelDataTimeStamps'][0,2])* self.timeStepMS
+                    self. nChannels = len(np.array((self.extractedFile['/Data/' + recording + '/AnalogStream/' + stream + '/ChannelData'])[:, 0]))
+                    if (self.isGui == False):
+                        self.GetRelevantTimestamps()
+                        self.GetRelevantChannels()
+                        if (( self.startTimeIndex!=None) and ( self.endTimeIndex!=None) and ( self.startChannel!=None) and ( self.endChannel!=None) and ( self.timestamps[0]!=None)):
+                            self.metaData = np.array(
+                                (self.extractedFile['/Data/' + recording + '/AnalogStream/' + stream + '/ChannelData'])[ self.startChannel-1: self.endChannel,  self.startTimeIndex: self.endTimeIndex])
+                            self.metaData=self.metaData.transpose()
+                            self.PlotData(self.isGui)
+                        else:
+                            print("Error Loading Data, Please Try Again")
+        except Exception as e:
+            print("An exception occurred. Please Try Again")
+            print(e)
+            return
+
+    #GetAndPlotMetaData- Extract the data for GUI application and plots it. 
+    def GetAndPlotMetaData(self):
+        self.metaData = np.array(
+            (self.extractedFile['/Data/' +self.listOfRecordings[0] + '/AnalogStream/' + self.listOfStreams[0] + '/ChannelData'])[
+            0: self.nChannels, self.startTimeIndex: self.endTimeIndex])
+        self.metaData = self.metaData.transpose()
+        return self.PlotData(self.isGui)
