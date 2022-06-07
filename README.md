@@ -1,4 +1,4 @@
-# electrophysiology-parser-python
+#electrophysiology-parser-python
 README Neural Electrophysiology Data Analyzer
 Written By: Eyal Brand and Michael Levi
 
