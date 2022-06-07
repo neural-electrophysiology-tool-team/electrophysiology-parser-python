@@ -4,8 +4,8 @@ Written By: Eyal Brand and Michael Levi<br/>
 
 1.	Setup Requirements:<br/>
   Must install packages:<br/>
-    •	H5py -3.6.0<br/>
-    •	Numpy -1.22.2<br/>
+    >•	H5py -3.6.0<br/>
+    >•	Numpy -1.22.2<br/>
     •	OS -8.6<br/>
     •	matplotlib.pyplot -3.5.1<br/>
     •	pyopenephys - 1.1.5<br/>
