@@ -2,14 +2,14 @@ README Neural Electrophysiology Data Analyzer
 Written By: Eyal Brand and Michael Levi
 
 1.Setup Requirements:
-	Must install packages:
-		•	H5py 
+  -	Must install packages:
+	-	•	H5py 
 		•	Numpy 
 		•	OS
 		•	matplotlib.pyplot
 		•	pyopenephys
-	GUI additional Packages:  
-		•	sys
+  -	GUI additional Packages:  
+	-	•	sys
 		•	matplotlib
 		•	PyQt5
 		•	Easygui
