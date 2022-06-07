@@ -26,7 +26,7 @@ Written By: Eyal Brand and Michael Levi<br/>
     vii.Use the + or – window time to see other time sections of the recording.<br/>
     viii.	Channels, Time Window and Start Time, parameters can be changes at any time.<br/>
     ix.	You can zoom in and out, save the plot and change the scale of the axis. <br/>
- > b.	Console Application: <br/>
+ < b.	Console Application: <br/>
   >>  i.	Clone the project.<br/>
     ii.	Run main.py<br/>
     iii.	Provide a full file/folder path and follow the instructions.<br/>
