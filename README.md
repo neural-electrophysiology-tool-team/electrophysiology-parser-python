@@ -31,11 +31,11 @@ Written By: Eyal Brand and Michael Levi<br/>
     ii.	Run main.py<br/>
     iii.	Provide a full file/folder path and follow the instructions.<br/>
 
-3.	Code structure: <br/>
-  >a.	FormatInterface.py:<br/>
-   >> i.	This is the abstract class. All formats inherit from this class.<br/>
-    ii.	This class includes the basic parameters such as:<br/>
-    >>>  1.	Time duration. <br/>
+*3.	Code structure: <br/>
+  +a.	FormatInterface.py:<br/>
+   ++ i.	This is the abstract class. All formats inherit from this class.<br/>
+    ++ii.	This class includes the basic parameters such as:<br/>
+    1.	Time duration. <br/>
       2.	Time window. <br/>
       3.	Number of channels<br/>
       4.	Indices of the channels according to the format structure. <br/>
@@ -47,8 +47,8 @@ Written By: Eyal Brand and Michael Levi<br/>
       3.	GetRelevantTimestamps- Gets the relevant timestamps for console application.<br/>
       4.	GetTimeIndex- Gets  the time indices of the matrix that contains the metadata according to the selected parameters.<br/>
       5.	ShowFileInnerSection- Some data formats are built with many folders. This function makes it more convenient to explore in the data structure.<br/>
-  >b.	MCH5Interface.py, NWBInterface.py, OERecordingsInterface.py:<br/>
-   >> i.	These classes inherit from FormatInterface.<br/>
+  +b.	MCH5Interface.py, NWBInterface.py, OERecordingsInterface.py:<br/>
+  ++ i.	These classes inherit from FormatInterface.<br/>
     >>ii.	All formats must have the following functions:<br/>
       >>>1.	GetData- extracts the data (usually done via python packages).<br/>
       it should extract the data according to the selected channels and time window.<br/>
