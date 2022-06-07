@@ -1,6 +1,6 @@
-#electrophysiology-parser-python
-README Neural Electrophysiology Data Analyzer
-Written By: Eyal Brand and Michael Levi
+#electrophysiology-parser-python<br/>
+README Neural Electrophysiology Data Analyzer<br/>
+Written By: Eyal Brand and Michael Levi<br/>
 
 1.	Setup Requirements:
   Must install packages:
