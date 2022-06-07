@@ -3,16 +3,16 @@ Written By: Eyal Brand and Michael Levi
 
 1.Setup Requirements:
   -	Must install packages:
-	-		H5py 
-	-		Numpy 
-	-		OS
-	-		matplotlib.pyplot
-	-		pyopenephys
+	-		H5py -3.6.0
+	-		Numpy -1.22.2
+	-		OS -8.6
+	-		matplotlib.pyplot -3.5.1
+	-		pyopenephys -1.1.5
   -	GUI additional Packages:  
-	-		sys
-	-		matplotlib
-	-		PyQt5
-	-		Easygui
+	-		sys -8.6
+	-		matplotlib -3.5.1
+	-		PyQt5 -5.15.6
+	-		Easygui -0.98.2
 2.How to run: 
   -		GUI Application:
 	-		Clone the project.
