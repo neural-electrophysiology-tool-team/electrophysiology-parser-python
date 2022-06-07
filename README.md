@@ -16,10 +16,10 @@ Written By: Eyal Brand and Michael Levi<br/>
     •	Easygui - 0.98.2<br/>
     
 2.	How to run: <br/>
-  a.	GUI Application:<br/>
-    i. Clone the project.<br/>
-    ii. Run MainGUIApplication.py or use .exe file.<br/>
-    iii. Choose a file type and select a folder for OE recordings or a file for NWB/MCH5 via the ‘File Explorer’ button. <br/>
+ > a.	GUI Application:<br/>
+   >> i. Clone the project.<br/>
+   >> ii. Run MainGUIApplication.py or use .exe file.<br/>
+   >> iii. Choose a file type and select a folder for OE recordings or a file for NWB/MCH5 via the ‘File Explorer’ button. <br/>
     iv. Choose the channels you would like to display. <br/>
      v. Select start time and a window time (the window time will be used to go forward and backwards in time).<br/>
     vi. Click ‘Plot’ button. <br/>
