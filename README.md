@@ -32,29 +32,29 @@ Written By: Eyal Brand and Michael Levi<br/>
     iii.	Provide a full file/folder path and follow the instructions.<br/>
 
 3.	Code structure: <br/>
-  a.	FormatInterface.py:<br/>
-    i.	This is the abstract class. All formats inherit from this class.<br/>
+  >a.	FormatInterface.py:<br/>
+   >> i.	This is the abstract class. All formats inherit from this class.<br/>
     ii.	This class includes the basic parameters such as:<br/>
-      1.	Time duration. <br/>
+    >>>  1.	Time duration. <br/>
       2.	Time window. <br/>
       3.	Number of channels<br/>
       4.	Indices of the channels according to the format structure. <br/>
       5.	Indices of timestamps according to the format structure. <br/>
       6.	Metadata.<br/>
-    iii.	This class includes the basic functionalities:<br/>
-      1.	PlotData- Data is provided from file and is plotted according to the channels selection and time window.<br/>
+    >>iii.	This class includes the basic functionalities:<br/>
+      >>>1.	PlotData- Data is provided from file and is plotted according to the channels selection and time window.<br/>
       2.	 GetRelevantChannels- Gets the relevant channels for console application.<br/>
       3.	GetRelevantTimestamps- Gets the relevant timestamps for console application.<br/>
       4.	GetTimeIndex- Gets  the time indices of the matrix that contains the metadata according to the selected parameters.<br/>
       5.	ShowFileInnerSection- Some data formats are built with many folders. This function makes it more convenient to explore in the data structure.<br/>
-  b.	MCH5Interface.py, NWBInterface.py, OERecordingsInterface.py:<br/>
-    i.	These classes inherit from FormatInterface.<br/>
-    ii.	All formats must have the following functions:<br/>
-      1.	GetData- extracts the data (usually done via python packages).<br/>
+  >b.	MCH5Interface.py, NWBInterface.py, OERecordingsInterface.py:<br/>
+   >> i.	These classes inherit from FormatInterface.<br/>
+    >>ii.	All formats must have the following functions:<br/>
+      >>>1.	GetData- extracts the data (usually done via python packages).<br/>
       it should extract the data according to the selected channels and time window.<br/>
       It should also extract the time step (sampling rate), the total time duration and the number of channels for both GUI and Console applications. <br/>
-      2.	 GetAndPlotMetaData- Extract the data for GUI application and plots it.  <br/>
-  c.	FileHandler.Py:<br/>
+      >>>2.	 GetAndPlotMetaData- Extract the data for GUI application and plots it.  <br/>
+  >c.	FileHandler.Py:<br/>
     i.	FileHandler-Gets the input file and creates an object for the provided file according to its format.<br/>
     ii.	GetFilePath- Converts the file path to python format.<br/>
   d.	Main.py (Console Application):<br/>
