@@ -34,7 +34,7 @@ class FormatInterface:
     #the channels selection and time window.
     def PlotData(self, isGui):
         try:
-            if isGui==False:
+            if isGui == False:
                 self.listOfChannels= range(self.relativeStartChannelIndex,self.relativeEndChannelIndex+1)
             nSelectedChannels= len(self.listOfChannels)
             colors = plt.rcParams["axes.prop_cycle"]()
