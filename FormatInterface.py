@@ -24,10 +24,11 @@ class FormatInterface:
        self.nChannels=0
        self.startChannel=0
        self.endChannel=0
-       self.relativeStartChannelIndex=0
-       self.relativeEndChannelIndex=0
-       self.metaData=[]
+       self.relativeStartChannelIndex = 0
+       self.relativeEndChannelIndex = 0
+       self.metaData = []
        self.listOfChannels=[]
+       self.samplingRate = 0
 
     #PlotData- Data is provided from file and is plotted according to
     #the channels selection and time window.
@@ -40,6 +41,7 @@ class FormatInterface:
             fig, graph = plt.subplots(nSelectedChannels,1, sharex=True)
             graphIndex = 0
             if nSelectedChannels>1:
+                # otherwise subplot function can't handle 1 plot.
                 for channel in self.listOfChannels:
                     selectedData=self.metaData[(self.relativeStartTimeIndex):(self.relativeEndTimeIndex), int(channel)-1]
                     color = next(colors)["color"]
@@ -82,7 +84,8 @@ class FormatInterface:
             endChannel = int(input())
         self.startChannel = startChannel
         self.endChannel = endChannel
-        self.relativeEndChannelIndex =self.endChannel -self.startChannel
+        self.relativeEndChannelIndex =self.endChannel -self.startChannel # relative: all are relative to the specific
+        # choice
         self.relativeStartChannelIndex = 0
 
     # GetRelevantTimestamps- Gets the relevant timestamps for
@@ -106,8 +109,9 @@ class FormatInterface:
         self.relativeEndTimeIndex = self.endTimeIndex - self.startTimeIndex - 1
         self.relativeStartTimeIndex = 0
 
-    #GetRelevantChannels- Gets the relevant channels for console
-    #application.
+
+    # Some data formats are built with many folders. This function makes it more convenient to explore in the data
+    # structure.
     def ShowFileInnerSection(self,fileSec):
         try:
             innerSectionList = []
