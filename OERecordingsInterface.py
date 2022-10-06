@@ -2,11 +2,12 @@ import pyopenephys
 import numpy as np
 import FormatInterface
 
+
 # These classes inherit from FormatInterface.
 class HandelOEFile(FormatInterface.FormatInterface):
-    def __init__(self,inputFile,isGui):
+    def __init__(self, inputFile, isGui):
         super().__init__()
-        self.isGui=isGui
+        self.isGui = isGui  # True or False
         self.inputFile = inputFile
         self.experiments = []
         self.recordings = []
@@ -14,33 +15,35 @@ class HandelOEFile(FormatInterface.FormatInterface):
 
     # GetData- extracts the data (usually done via python packages).
     # it should extract the data according to the selected channels and time window.
-    # It should also extract the time step (sampling rate), the total time duration and the number of channels for both GUI and Console applications.
+    # It should also extract the time stamp (sampling rate), the total time duration and the number of channels for both
+    # GUI and Console applications.
     def GetData(self):
         try:
             self.extractedFile = pyopenephys.File(self.inputFile)
-            self.experiments=self.extractedFile.experiments
-            for experiment in  self.experiments:
+            self.experiments = self.extractedFile.experiments
+            for experiment in self.experiments:
                 self.recordings = experiment.recordings
-                for recording in  self.recordings:
-                    self.durationMS = float((recording).duration)*1e3 # Scan all files and gets the total duration,
+                for recording in self.recordings:
+                    self.durationMS = float((recording).duration) * 1e3  # Scan all files and gets the total duration,
                     # therefore, needs to come first
                     self.samplingRate = float(recording.sample_rate)
-                    self.timeStepMS = float(1/self.samplingRate)*1e3
-                    self.nChannels =int (recording.nchan)
+                    self.timeStepMS = float(1 / self.samplingRate) * 1e3
+                    self.nChannels = int(recording.nchan)
                     if (self.isGui == False):
                         self.GetRelevantTimestamps()
                         self.GetRelevantChannels()
                         # extraction of the metadata:
                         if ((self.startTimeIndex != None) and (self.endTimeIndex != None) and
-                                ( self.startChannel != None) and (self.endChannel != None) and
-                                ( self.timestamps[0] != None)):
+                                (self.startChannel != None) and (self.endChannel != None) and
+                                (self.timestamps[0] != None)):
                             self.metaData = np.array(((recording.analog_signals[0]).signal)
-                                                     [ self.startChannel-1: self.endChannel,  self.startTimeIndex: self.endTimeIndex])
+                                                     [self.startChannel - 1: self.endChannel,
+                                                     self.startTimeIndex: self.endTimeIndex])
                             self.metaData = self.metaData.transpose()
                             self.PlotData(self.isGui)
                         else:
                             print("Error Loading Data, Please Try Again")
-        except Exception as e:
+        except ImportError as e:
             print("An exception occurred. Please Try Again")
             print(e)
             return
